@@ -1,0 +1,52 @@
+---
+title: "Ka gali R "
+author: "Juste"
+date: '2016 m rugsëjis 27 d '
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Kodël dirbti su R programa smagu
+
+*Mes mokomës dirbti su R,*
+*paþiûrëkim, kà jis gali:* 
+
+
+
+## Grafikai
+
+*Galime átraukti norimus grafikus:*
+
+```{r echo=FALSE}
+data(cars)
+plot(cars)
+```
+
+
+*Galime ádëti lenteles*
+
+```{r echo=FALSE , results = 'asis'}
+library(knitr)
+kable(mtcars[1:5,], caption= "A knitr kable.")
+```
+
+*Skelbti elektroniná paðtà bei internetinius adresus:*
+
+<justinasasnauskaite@gmail.com>
+
+<https://en.wikipedia.org/wiki/Markdown>
+
+*Ar pateikti tik nuorodas:*
+
+[Wiki markdown](https://en.wikipedia.org/wiki/Markdown)
+
+
+
+*Ádëti paveiksliukus:*
+
+![Markdown paveiksliukas](https://upload.wikimedia.org/wikipedia/commons/thumb/4/48/Markdown-mark.svg/2000px-Markdown-mark.svg.png)
+
+ 
