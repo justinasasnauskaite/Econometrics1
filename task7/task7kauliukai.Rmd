@@ -1,0 +1,18 @@
+---
+title: "task7kauliukai"
+author: "Juste"
+date: '2016 m spalis 20 d '
+output: html_document
+---
+
+#Du þaidëjai þaidþia toká þaidimà. Pirmasis þaidëjas meta tris kauliukus ir fikuoja iðkritusiø taðkø sumà. 
+#Antrasis þaidëjas ridena du kauliukus ir skiaèiuoja iðkrituiø taðkø sumà. Laimi tas þaidëjas, kurio taðkø suma yra didesnë.
+#Jeigu taðkø sumos yra lygios, tai, tai ekspermentas kartojamas ið naujo (ir taip kartojama tol, kol galiausiai nustatomas laimëtojas).
+#Kokia tikimybë laimëti pirmajam þaidëjui?
+
+#Funkcija, imituojanti kauliukø ridenimà:
+
+
+ridenimas <- function (NDice) {
+(sample (6, size=NDice, replace = TRUE))
+}
