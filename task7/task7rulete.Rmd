@@ -4,17 +4,29 @@ author: "Juste"
 date: '2016 m spalis 19 d '
 output: html_document
 ---
-#Europieti??kos rulet??s rate yra 37 sunumeruoti spalvoti langeliai: 18 juod?? ir raudona?? langeli?? ir vienas ??alias.
-#Tikimyb?? laim??ti statant ant vienos spalvos pa??ymiu p1. Tikimyb?? laim??ti statant ant kitos spalvos ir ??alios pa??ymiu p2.
-# Tegu n -statym?? skai??ius.
+Europietiskos ruletes rate yra 37 sunumeruoti spalvoti langeliai: 18 juodi ir raudoni langeliai ir vienas zalias.
+Tikimybe laimeti statant ant vienos spalvos pazymiu p1. Tikimybe laimeti statant ant kitos spalvos ir zalios pazymiu p2.
+Tegu n -statym?? skai??ius.
+``` {r}
 n=1000
 p1=18/37
 p2=19/37
-#Sukuriu funkcij??, kuri imituoja rulet??s sukim??:
+```
+Sukuriu funkcija, kuri imituoja ruletes sukima:
+ 
+```{r}
  rulete<- function(){
 sum(sample(c(1,-1), size=n, replace=TRUE, prob=c(p1,p2)))
-}
-#Eksperiment?? kartoju 1000 kart??:
+ }
+```
+Eksperimenta kartoju 1000 kartu:
+
+
+``` {r} 
 eksperimentai <- replicate (1000, rulete())
-# Tikimyb??, kad balansas bus teigiamas:
+```
+Tikimybe, kad balansas bus teigiamas:
+
+``` {r} 
 mean(eksperimentai>0)
+```
