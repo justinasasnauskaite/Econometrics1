@@ -1,0 +1,43 @@
+---
+title: "task7"
+author: "Juste"
+date: '2016 m spalis 28 d '
+output: html_document
+---
+
+Moneta. Tarkime metama moneta. Jeigu iðkrenta herbas, tai laimite $12$ EUR. Jeigu skaièius, tai praloðiate $10$ EUR. Bus þaidþiama $100$ kartø ir gauti rezultatai sumuojami. Kokia tikimybë jums turëti teigiamà balansà po $100$ kartø? Koks balanso pasikliautinis $95%$ intervalas? Kaip atrodo balanso tankis?
+
+Sukuriama funkcija , kuri parodo laimejima po n kartu.
+
+```{r}
+laimejimas<-function(n){
+  sum(sample(c(12,-10),size=n,replace=TRUE))
+}
+```
+
+Sukuriama funkcija, kuri apskaiciuoja tikimybæ, kad laimëjimo balansas yra teigiamas: (Naudojamas Monte Carlo metodas: "replicate" funkcijos pagalba bandymas kartojamas 100 kartø ir apskaièiuojamas vidurkis(=tikimybë), kad laimejimo balansas yra teigiamas)
+
+```{r}
+tikimybe<-function(n){
+  mean(replicate(100, laimejimas(n))>0)
+}
+```
+
+Skaièiuojama tikimybe tureti teigiama balansa su n=100
+
+```{r}
+tikimybe(100)
+```
+
+Balanso tankis:
+
+```{r}
+sim<-replicate(100, laimejimas(100))
+```
+
+Ieðkomas $95%$ pasikliautinis intervalas (n=100)
+
+```{r}
+c(quantile(sim, 0.025),quantile(sim, 0.975))
+
+```
