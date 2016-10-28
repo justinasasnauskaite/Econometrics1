@@ -93,3 +93,6 @@ dup <- which(duplicated(df2), TRUE)
 df2 <- df2[-dup,]
 16-table(df2$user)+table(df_skipped$user)
 ```
+
+Pastaba.
+Didşioji naudota dalis kodo yra Simonos Gritytës.
