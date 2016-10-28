@@ -1,0 +1,30 @@
+---
+title: "crt"
+author: "Juste"
+date: '2016 m spalis 28 d '
+output: html_document
+---
+Generuojame $n$ atsitiktiniø dydþiø turinèiø Beta skirstiná su parametrais $\alpha=\beta=0.5$ Ið ðiø atsitiktiniø dydþiø suskaièiuojamas aritmetinis vidurkis. Kaip atrodo aritmetinio vidurkio tankis, kai $n=100$?
+
+n atsitiktiniu dydziu pagal beta skirstini:
+
+```{r}
+avid=function(n){
+  mean(rbeta(n, 0.5, 0.5))
+}
+```
+
+10000 vidurkio realizaciju, n=100:
+
+```{r}
+v = replicate(10000, avid(100))
+```
+
+Histograma su joje esancia tankio kreive:
+
+```{r}
+histograma<-hist(v,main ="vidurkio tankis",xlab ="vidurkio reiksmes",ylab = "tankis", probability = TRUE)
+
+lines(density(v), col=6,lwd=3)
+```
+
