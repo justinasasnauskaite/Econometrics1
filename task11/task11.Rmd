@@ -1,18 +1,20 @@
+#Task 11 
 Pakete datasets yra duomenø masyvas longley. Ið ðio kintamøjø padarykite tiesinæ regresijà, kur prognozuojamas kintamasis bûtø GNP, o regresosius Employed. Jums reikia:
 
-Ávertinti paprastosios tiesinës regresijos modelá. Pateikti modelio summary ir pakomentuoti kà reiðkia gauti skaièiai. Kaip interpretuoti gautus rezultatus?
+1.Ávertinti paprastosios tiesinës regresijos modelá. Pateikti modelio summary ir pakomentuoti kà reiðkia gauti skaièiai. Kaip interpretuoti gautus rezultatus?
 
-Padarykite modelio prognozes taðkuose 62,65,6862,65,68.
+2.Padarykite modelio prognozes taðkuose 62,65,68.
 
-Iðbrëþkite kintamøjø sklaidos diagramà kartu su tiesinës regresijos tiese ir naujomis prognozëmis. Grafikà pateikite su pilna legena, kurioje bûtø nurodyti visi þymëjimai.
+3.Iðbrëþkite kintamøjø sklaidos diagramà kartu su tiesinës regresijos tiese ir naujomis prognozëmis. Grafikà pateikite su pilna legena, kurioje bûtø nurodyti visi þymëjimai.
 
 Kintamasis, kurio reiðmes norima prognozuoti yra priklausomas kintamasis. Jis yra GNP.
-Kintamasis, pagal kurio reikðmes norima prognozuoti yra Employed.
+Kintamasis, pagal kurio reikðmes norima prognozuoti yra Employed (nepriklausomas kintamasis).
 GNP - Gross National product. Employed -  number of people employed.
 
 Pasiþiûriu, kokius duomenis turime
+
 ```{r}
-head(longley)
+head(longley,n=2)
 ```
 
 Ásivedu kintamuosius
@@ -36,20 +38,10 @@ Dabar randame regresijos lygtá.
 
 ```{r}
 lygtis<-lm(GNP~Employed)
+lygtis
 ```
 
-Funkcijos iðvestis:
-
-Call:
-lm(formula = GNP ~ Employed)
-
-Coefficients:
-(Intercept)     Employed  
-   -1430.48        27.84  
-
 Reiðkia mûsø regresijos lygtis yra :
-
-GNP=27*84Employed-1430.48
 
 y=27.84*x-1430.48
 
@@ -60,19 +52,136 @@ plot(Employed, GNP)
 abline(lygtis)
 ```
 
+#Tiesinës regresijos prielaidos
 
-Tiesinës regresijos prielaidos
-1) ei normaliai pasiskirstæ atsitiktiniai dydþiai. Tikrinam:
+1) Kad galëtume taikyti tiesinës regresijos modelá, liekamosios paklaidos turi bûti normaliai pasiskirstæ atsitiktiniai dydþiai. Tikrinam:
 
 ``` {r} 
-ei<-GNP-((-1430.48)+27.84*Employed)
-ei
-qqnorm(ei)
-qqline(ei)
+qqnorm(lygtis$residuals)
+qqline(lygtis$residuals)
 ```
 
 Matome, kad liekamosios paklaidos yra normaliai pasiskirstæ atsitiktiniai dydþiai.
+Jeigu mûsø paklaidos yra normaliai pasiskirsèiusios, ið to iðplaukia, kad vidurkis skirtumo tarp turimø reikðmiø ir spejamø reikðmiø yra arti nulio. (tai yra gerai modeliui) 
+
+2) Visu liekamujø paklaidø vidurkiai lygûs nuliui o dispersijos lygios. Tikrinu:
+
+```{r}
+ plot(lygtis$fitted.values,lygtis$residuals)
+```
+
+Jeigu, pavyzdþiui, paklaidos didëja arba maþëja su fiksuotomis reiksmëmis grafike , tai greièiausiai liekamujø paklaidø dispersijos nëra lygios.
+Ið grafiko matosi, kad reikðmës iðsibarsciusios atsitiktinai apie nulá ir nëra dësningumo.
+
+3) Visos liekamosios paklaidos nepriklausomos
+
+```{r}
+library(lmtest)
+dwtest(lygtis)
+```
+
+Kuo DW arèiau 2, tuo maþiau tikëtina , kad autokoreliacija yra. Kadangi DW = 1.5298 yra (sàlyginai arti 2 ), tai autokoreliacija maþai tikëtina.
+
+Modelio summary:
+
+```{r}
+summary(lygtis)
+```
+
+*Call:*
+
+*lm(formula = GNP ~ Employed)*
+
+Rodo, kaip sudaryta formulë (mûsø priklausomas kintamasis buvo GNP, nes jo reikðmes prognozuojame). Formulei sudaryti reikalingi tik priklausomas ir nepriklausomas kintamieji (GNP ir Employed)
+
+*Residuals:*
+
+*Min      1Q  Median      3Q     Max *
+
+*-39.223 -11.920   0.855  14.882  23.555 *
+
+Residuals (liekamosios paklaidos)  yra skirtumas tarp stebetu reikðmiø ir reikðmiø, kurias nuspëjo regresijos modelis. (formulë ei = GNP - (-1430.48+27.84*Employed, èia ei - i-toji liekamoji paklaida, -1430.48 ir 27.84 - apskaièiuoti lygties koeficientai)
+
+Jei modelis geras, mûsø residuals duomenys turëtø bûti simetriðki, o Median arti nulio.
+Taigi mûsø Median yra sàlyginai toli nuo nulio, o Min ir Max reikðmës nëra simetriðkos. 
+Taèiau 1Q ir 3Q reikðmës yra sàlyginai simetriðkos.
+Is ankstesnio grafiko matom, kad residuals yra normaliai pasiskirstæ ir nëra reikðmingo dësningumo, kas yra geras þenklas  modeliui. 
+
+*Coefficients:*
+
+*Estimate Std. Error t value Pr(>|t|)    *
+
+*(Intercept) -1430.482     89.361  -16.01 2.15e-10 ****
+
+*Employed       27.836      1.366   20.37 8.36e-12 ****
 
 
+```{r}
+summary(lygtis)$coefficients[1:2,1]
 
+```
 
+Tai yra musu lygties koeficientai a,b, apskaièiuoti pagal regresijà.
+
+```{r}
+summary(lygtis)$coefficients[1:2,2]
+```
+
+Std. Error - sklaidos matas, kuris nusako sklaidà apie mûsø apskaièiuotus a ir b koeficientus.
+Mûsø atveju standard errors yra atitinkamai 16 ir 20 maþesni nei apskaièiuoti koeficientai. 
+
+```{r}
+summary(lygtis)$coefficients[1:2,3]
+```
+
+t-value
+
+Skirtos apskaièiuoti pasikliovimo lygmená bei p reikðmes.
+
+```{r}
+summary(lygtis)$coefficients[1:2,4]
+```
+
+p-value
+
+Tikimybë, jog kintamieji yra nesusijæ vienas su kitu.
+Ðios reiksmës mums reikalingos kuo maþesnës - mûsø atveju jos yra labai maþos.
+
+*Residual standard error: 18.58 on 14 degrees of freedom*
+
+Paklaidø standartinis nuokrypis yra vidutinis dydis, kuriuo mûsø priklausomas kintamasis skirsis nuo tikrosios regresijos tiesës. 
+Paklaidø standartinis nuokrypis buvo apskaièiuotas su 14 laisves laipsniø.
+
+*Multiple R-squared:  0.9674,    Adjusted R-squared:  0.965 *
+
+Tai matas, skirtas ávertinti modelio tinkamumà stebëjimams. Kuo didesnis skaièius - tuo modelis geresnis. Vienetas atitinka tobulà modelá, o maþiausia reikðmë - 0.
+Interpretacija: ðiuo atveju apytiksliai 96 procentai GNP yra paaiðkinami pagal Employed skaièiø.
+(R-squared indikuoja aukstà koreliacijà, bet nebûtinai aukðtà prieþastingumà).
+
+*F-statistic: 415.1 on 1 and 14 DF,  p-value: 8.363e-12*
+
+Indikatorius , nusakantis ryðá tarp priklausomo ir nepriklausomo kintamujø.
+Kuo toliau F-statistic yra nuo 1 , tuo geriau. Apskritai, kai turime didelá skaièiø duomenø, F-statistic, kuri yra tik truputi didesnë nei 1, yra pakankamas indikatorius atmesti nulinæ hipotezæ, kuri sako, kad kintamieji neturi ryðio. 
+Mûsø pavyzdyje F-statistic yra 415.1 ir yra pakankamai didesnë uþ 1, palyginus su mûsø duomenø kiekiu.
+
+#2. Padarykite modelio prognozes taðkuose 62,65,68.
+
+Tiesinë regresija leidþia daryti prognozes duomenims, kurie yra turimame intervale. (papildyti)
+
+```{r}
+x<-c(62,65,68)
+y<-27.84*x-1430.48
+y
+```
+
+#3. Iðbrëþkite kintamøjø sklaidos diagramà kartu su tiesinës regresijos tiese ir naujomis prognozëmis. Grafikà pateikite su pilna legena, kurioje bûtø nurodyti visi þymëjimai.
+
+```{r}
+plot(Employed, GNP,col="green",pch=1)
+points(x,y,col="red", pch=2)
+lines(abline(lygtis))
+legend( 60.05,540, legend=c("Duomenø sklaida","Regresijos tiesë","Naujos prognozës"), 
+        col=c("green","black","red"), lty=c(NA,1,NA), pch=c(1,NA,2), merge=FALSE )
+```
+
+ 
