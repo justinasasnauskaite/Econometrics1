@@ -1,0 +1,78 @@
+Pakete datasets yra duomenø masyvas longley. Ið ðio kintamøjø padarykite tiesinæ regresijà, kur prognozuojamas kintamasis bûtø GNP, o regresosius Employed. Jums reikia:
+
+Ávertinti paprastosios tiesinës regresijos modelá. Pateikti modelio summary ir pakomentuoti kà reiðkia gauti skaièiai. Kaip interpretuoti gautus rezultatus?
+
+Padarykite modelio prognozes taðkuose 62,65,6862,65,68.
+
+Iðbrëþkite kintamøjø sklaidos diagramà kartu su tiesinës regresijos tiese ir naujomis prognozëmis. Grafikà pateikite su pilna legena, kurioje bûtø nurodyti visi þymëjimai.
+
+Kintamasis, kurio reiðmes norima prognozuoti yra priklausomas kintamasis. Jis yra GNP.
+Kintamasis, pagal kurio reikðmes norima prognozuoti yra Employed.
+GNP - Gross National product. Employed -  number of people employed.
+
+Pasiþiûriu, kokius duomenis turime
+```{r}
+head(longley)
+```
+
+Ásivedu kintamuosius
+
+```{r}
+GNP<-longley[,2]
+Employed<-longley[,7]
+
+```
+
+Pasiþiûriu, kaip atrodo ðiø kintamøjø grafikas bei patikrinu koreliacijà.
+
+```{r}
+plot(Employed,GNP)
+cor(Employed, GNP)
+```
+
+Ðiø kintamøjø koreliacija yra didelë ( 0.9835516 ), kas reiðkia, kad ðiø kintamøjø tiesinë priklausomybë yra stipri ir juos galima tiesiðkai prognozuoti. 
+
+Dabar randame regresijos lygtá.
+
+```{r}
+lygtis<-lm(GNP~Employed)
+```
+
+Funkcijos iðvestis:
+
+Call:
+lm(formula = GNP ~ Employed)
+
+Coefficients:
+(Intercept)     Employed  
+   -1430.48        27.84  
+
+Reiðkia mûsø regresijos lygtis yra :
+
+GNP=27*84Employed-1430.48
+
+y=27.84*x-1430.48
+
+Mûsø gauta regresijos lygtis atitinka duomenø iðsibarstymà grafike:
+
+```{r}
+plot(Employed, GNP)
+abline(lygtis)
+```
+
+
+Tiesinës regresijos prielaidos
+1) ei normaliai pasiskirstæ atsitiktiniai dydþiai. Tikrinam:
+
+``` {r} 
+ei<-GNP-((-1430.48)+27.84*Employed)
+ei
+qqnorm(ei)
+qqline(ei)
+```
+
+Matome, kad liekamosios paklaidos yra normaliai pasiskirstæ atsitiktiniai dydþiai.
+
+
+
+
