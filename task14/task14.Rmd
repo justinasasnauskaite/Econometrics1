@@ -1,0 +1,41 @@
+Su R pagalba jums reikia iğspræsti 9-tos klasës uşdaviná. Uşdavinys:
+
+Ar galima taip pertvarkyti skaièiaus:
+
+a) 9754310
+
+b) 8754310
+
+Skaitmenis, kad gautas skaièius dalytøsi iğ 37 ?
+
+
+a) sprendimas :
+
+Kadangi reik pertvarkyti skaièiaus 9754310 skaitmenis, tai sudarau vektoriø su jo skaitmenimis.
+
+```{r} 
+sk<-c(9,7,5,4,3,1,0)
+```
+
+Mûsø funkcija, skirta rasti skaièiø, kuris dalijasi iğ 37:
+
+```{r}
+repeat {
+x<-as.integer(paste(sample(sk,7, replace=FALSE),collapse = ""))
+if(x%%37==0) {print(x) ; break}
+}
+```
+
+sample funkcijos iğvestis yra daugiamatis vektorius, tad funkcijos paste pagalba, gaunu tik vienà skaièiø iğ ávestø skaitmenø.
+
+Jeigu vietoj {print(x) ; break} árağytume tiesiog print(x) , tai gautume sugeneruotus labai daug skaièiø. Mums nereik begalës skaièiø, kadangi uşduoties sàlyga reikalauja bent vieno skaièiaus.
+
+b) sprendimas analogiğkas, tik pakeièiam vienà skaitmená, priskiriamà vektoriui "sk".
+
+```{r}
+sk<-c(8,7,5,4,3,1,0)
+repeat {
+x<-as.integer(paste(sample(sk,7, replace=FALSE),collapse = ""))
+if(x%%37==0) {print(x) ; break}
+}
+```
