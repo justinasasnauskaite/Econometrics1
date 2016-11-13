@@ -1,0 +1,40 @@
+Su R pagalba jums reikia iðspræsti uþdaviná. Uþdavinys:
+Seka a_n sudaryta pagal taisyklæ a_{n+2} = a_{n+1} / a_{n}. Pirmieji nariai yra a_1=2, a_2=3. Raskite a_{1989}.
+
+Sprendimas : 
+
+a_{n+2} = a_{n+1} / a_{n}
+
+Pertvarkius ðià iðraiðkà gauname
+a_{n+2} * a_{n} = a_{n+1} <=> a_{n} * a_{n+2} = a_{n+1}
+
+Funkcijos "solve"" sintaksë yra:
+
+*solve(a, b) *
+
+*kur a turëtø bûti kintamojo koeficientas, o b - deðinë lygybës pusë.*
+
+Kadangi mûsø neþinomasis, kurá norime rasti (jei naudosime solve funkcijà) turëtø bûti a_{n}, tai dar kart pertvarkome iðraiðkà.
+
+a_{n-2} * a_{n}  = a_{n-1}
+
+Dabar a_{n} yra mûsø tam tikra ieðkoma reikðmë, a_{n-2} funkcijos "solve" koeficientas a, o a_{n-1} - funkcijos "solve" koeficientas b.
+
+Mûsø funkcija, skirta apskaièiuoti n-tàjà reikðmæ:
+
+``` {r}
+seka<-function(n){
+x=numeric(n)
+x[1]=2
+x[2]=3
+for (i in 3:n) x[i]=solve(x[i-2],x[i-1])
+return(x[n])
+}
+```
+
+```{r}
+seka (1989) 
+```
+ 
+Taigi mûsø 1989-oji reikðmë yra 1.5
+
