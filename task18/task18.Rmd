@@ -1,0 +1,81 @@
+```{r}
+duomenys<-read.csv("https://raw.githubusercontent.com/1vbutkus/Econometrics1/master/task15/data.csv", header = TRUE)
+```
+
+Kaip atrodo musu duomenys:
+```{r}
+x<-duomenys$x
+y<-duomenys$y
+plot(x,y)
+```
+
+Sudarome modeli (antro laipsnio polinomas)
+
+```{r}
+modelis<-lm(y~x+I(x^2))
+summary(modelis)
+```
+
+
+PAAIðKINIMAI
+
+Call:
+
+lm(formula = yduom ~ xduom + xduom2)
+
+Rodo, kaip sudaryta formulë.
+
+Residuals (liekamosios paklaidos) yra skirtumas tarp stebetu reikðmiø ir reikðmiø, kurias nuspëjo regresijos modelis. 
+Jei modelis geras, mûsø residuals duomenys turëtø bûti simetriðki (taip ir yra), o Median arti nulio (Mûsø modelyje ji arti nulio)
+
+Coefficients:
+
+Std. Error - sklaidos matas, kuris nusako sklaidà apie mûsø apskaièiuotus koeficientus.
+
+t-value
+
+Skirtos apskaièiuoti pasikliovimo lygmená bei p reikðmes.
+
+p-value
+
+Tikimybë, jog kintamieji yra nesusijæ vienas su kitu. Ðios reiksmës mums reikalingos kuo maþesnës - mûsø atveju jos yra labai maþos.
+
+Residual standard error-Paklaidø standartinis nuokrypis yra vidutinis dydis, kuriuo mûsø priklausomas kintamasis skirsis nuo tikrosios regresijos tiesës. Paklaidø standartinis nuokrypis buvo apskaièiuotas su 97 laisves laipsniais.
+
+Multiple R-squared:  0.9897,    Adjusted R-squared:  0.9895 
+
+Tai matas, skirtas ávertinti modelio tinkamumà stebëjimams. Kuo didesnis skaièius - tuo modelis geresnis. Vienetas atitinka tobulà modelá, o maþiausia reikðmë - 0. Interpretacija: ðiuo atveju apytiksliai 99 procentai y yra paaiðkinami pagal nepriklausomà kintamàjá. (R-squared indikuoja aukstà koreliacijà, bet nebûtinai aukðtà prieþastingumà).
+
+F-statistic:  4652 on 2 and 97 DF,  p-value: < 2.2e-16
+
+Indikatorius , nusakantis ryðá tarp priklausomo ir nepriklausomo kintamujø. Kuo toliau F-statistic yra nuo 1 , tuo geriau. 
+
+
+
+Modelio prognozës taðkuose (0, 0.3, 0.5).
+
+```{r}
+prognozes<-predict(modelis,newdata=data.frame(x=c(0,0.3,0.5)))
+prognozes
+```
+
+
+Kintamøjø sklaidos diagrama:
+
+```{r}
+plot(x, y, xlab="x", ylab="y",main="Sklaidos diagrama",pch=1)
+xvalues<-seq(-0.5,1,0.1)
+prognozesmodelio<-predict(modelis, list(x=xvalues, x2=xvalues^2))
+lines(xvalues, prognozesmodelio      , col=3,      lwd=1)
+points(c(0,0.3,0.5), prognozes, col=2, pch=20)
+legend("topleft", legend = c("Modelis","Prognozes", "Duomenys" ), col = c(3,2,1), lty = c(1,NA,NA), pch=c(NA, 20, 1) )
+```
+
+
+Ref.
+http://www.theanalysisfactor.com/r-tutorial-4/
+http://blog.yhat.com/posts/r-lm-summary.html
+https://www.r-bloggers.com/polynomial-regression-techniques/
+
+
+

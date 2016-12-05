@@ -1,0 +1,78 @@
+
+17 uşd
+
+Nuskaitau duomenis.
+
+```{r}
+input <- read.csv("https://raw.githubusercontent.com/1vbutkus/Econometrics1/master/task16/input.csv", header = TRUE)
+train <- read.csv("https://raw.githubusercontent.com/1vbutkus/Econometrics1/master/task16/train.csv", header = TRUE)
+```
+
+Pasişiûriu, kokius turime duomenis, kad galëtume su jais dirbti.
+
+``` {r}
+head(input)
+head(train)
+```
+
+Kadangi turës bûti dvi lygtys, turime turëti du priklausomus kintamuosius ir du nepriklausomus kintamuosius.
+
+``` {r}
+xcol1 <- train$x[train$color == 1]
+xcol2 <- train$x[train$color == 2] 
+ycol1 <- train$y[train$color == 1]
+ycol2 <- train$y[train$color == 2] 
+```
+
+Turime patikrinti ar egzistuoja tiesinë priklausomybë nuo spalvos.
+
+Paşiûrim, kaip atrodo priklausomybiø grafikas:
+
+``` {r}
+plot(xcol1, ycol1, xlab = 'x', ylab = 'y', pch = 1, col = 1)  
+points(xcol2, ycol2, pch = 1, col = 2) 
+```
+
+Iğ grafiko rodosi, kad tiesinë priklausomybë egzistuoja ir yra stipri.
+
+Apskaièiuojam koreliacijà, kad bûtume tikri, dël priklausomybës.
+
+```{r}
+cor(xcol1, ycol1)
+cor(xcol2, ycol2)
+```
+
+Matome, kad koreliacija , kai color=1 yra 0.9384002, o kai color = 2 , turime atvirğtinæ koreliacijà, lygià -0.9427704, kuri irgi yra labai stipri. 
+
+Reik sukurti du modelius, atskirai, kai skirtingos spalvos.
+
+``` {r}
+modeliscol1 <- lm(ycol1~xcol1)
+modeliscol2 <- lm(ycol2~xcol2)
+```
+
+Priskiriu reiğkmes iğ input failo.
+
+```{r} 
+xinput1 <-input$x[input$color == 1] 
+xinput2 <-input$x[input$color == 2] 
+```
+
+Kokios bus prognozuojamos reikğmës:
+
+```{r}
+y1 = predict(modeliscol1, newdata = data.frame(xcol1 = xinput1)) 
+y2 = predict(modeliscol2, newdata = data.frame(xcol2 = xinput2)) 
+```
+
+Prognozës grafikas.
+
+```{r}
+plot(xinput1,y1, main = 'Prognozë', xlab = 'x', ylab = 'y', pch = 1, col = 1)
+points(xinput2, y2, pch = 1, col = 2)
+legend( "top",legend=c("Kai color=1" ,"Kai color=2"),col=c("black","red"), pch=c(1,1), merge=FALSE )
+
+```
+
+
+  
