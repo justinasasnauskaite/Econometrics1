@@ -1,0 +1,147 @@
+---
+title: "egzaminas"
+author: "Justina Sasnauskaite"
+date: '2017 m sausis 20 d '
+output: html_document
+---
+
+```{r}
+require(RCurl)
+data1<-read.csv("https://raw.githubusercontent.com/1vbutkus/Econometrics1/master/Egzaminas/data.csv", skip= 7, sep=  ";" )
+class(data1)
+class(data1$amzius)
+class(data1$galia)
+class(data1$markesKodas)
+class(data1$rida)
+class(data1$kaina)
+kaina<-data1$kaina
+kaina1<-as.numeric(as.character(kaina))
+rida<-data1$rida
+str(rida)
+```
+cia viskas gerai su duomenu tipu
+
+```{r}
+amzius<-data1$amzius
+amzius1<-as.numeric(as.character(amzius))
+```
+
+matosi visos NA
+
+```{r}
+galia<-data1$galia
+markesKodas<-data1$markesKodas
+
+data<-data.frame(kaina1,rida,amzius1,galia,markesKodas)
+str(data)
+```
+dabar faktorius turim tik prie markeskodo
+
+ieskom NA 
+
+```{r}
+kurieNA<-is.na(data)
+which(kurieNA, arr.ind=TRUE)
+```
+minusuoju is duomenu visas sitas eilutes
+```{r}
+eilutes<-which(kurieNA, arr.ind=TRUE)[,1]
+dataBeNa<-data[-eilutes,]
+```
+
+pasalinome
+
+```{r}
+length(eilutes)
+```
+eiluciu, kadangi radom 6 NA. 
+
+
+Kintamuju apzvalga
+```{r}
+summary(dataBeNa)
+plot(dataBeNa)
+```
+
+Tikrinu koreliacija,(istrinu markes koda nes jis yra fcator kintamasis)
+```{r}
+
+databemarkesKodo<-dataBeNa[,-5]
+koreliacija<-sapply(databemarkesKodo,cor, y=databemarkesKodo$kaina)
+koreliacija
+```
+kadangi regresijos modeli taikysim kainai tai patikrinu tik kainos koreliacija su visais kitais stulpeliais
+
+
+Dabar dataBeNa suskaidyti i testset ir trainset
+
+trainset yra dide4snis masyvas ir ji sudarys 80 proc reiksmiu.
+
+```{r}
+fractionTrain<-0.8
+fractionTest<-0.2
+```
+
+apskaiciuoju poaibiu dydzius
+```{r}
+
+sampleSizeTraining <- floor(fractionTrain   * nrow(dataBeNa))
+sampleSizeTest  <- floor(fractionTest       * nrow(dataBeNa))
+```
+
+sukuriu atsitiktinius indeksus duomenims.
+
+```{r}
+indicesTraining    <- sort(sample(seq_len(nrow(dataBeNa)), size=sampleSizeTraining))
+indicesTest  <- setdiff(seq_len(nrow(dataBeNa)), indicesTraining)
+```
+
+gauname duomenu dataBeNa du poaibius.
+
+
+
+```{r}
+trainset   <- dataBeNa[indicesTraining, ]
+testset       <- dataBeNa[indicesTest, ]
+```
+
+
+
+sudarom modeli, kuriame kaina tiesiskai priklauso nuokitu kintamuju
+```{r}
+
+fit<-lm(kaina1~rida+amzius1+galia+markesKodas, data=trainset)
+summary(fit)
+```
+Adjusted R-squared:  0.9215 , tai indikuoja, kad sudarytas modelis yra labai geras. Duomenys yra labai arti regresijos linijos.
+p-value: < 2.2e-16 p-reiksme maza, kas reiskia kad tikimybe kad koeficientai yra nuliniai yra be galo maza. 
+
+paklaidu normalumo tikrinimui is pradziu pasiziuriu, kaip jos atrodo grafiskai. 
+
+```{r}
+residuals<-fit$residuals
+qqnorm(residuals)
+qqline(residuals)
+```
+Paklaidos gan normaliai pasiskirsciusios, taciau yra nukrypimu.
+Nuline hipoteze yra, kad paklaidos yra normalios.Patikriname hipoteze .
+
+```{r}
+shapiro.test(residuals(fit))
+```
+
+Kadangi  p-value = 7.956e-11, tai turetume atmesti nuline hipoteze.
+Regresijos modelis yra gan atsparus nuokrypiams nuo normalumo prielaidos. 
+
+testset prognozes:
+```{r}
+testsetx<-data.frame(testset)
+testsetprognoze<-predict(fit,newdata=testsetx)
+testsetfaktines<-testset[,1]
+plot(testsetprognoze,testsetfaktines)
+confint<-predict(fit, testsetx, interval="predict",level=0.90)
+lines(testsetprognoze, confint[,2], col=2)
+lines(testsetprognoze, confint[,3], col=2)
+
+```
+
